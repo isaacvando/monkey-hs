@@ -11,16 +11,22 @@ common shared
     default-extensions: NamedFieldPuns, QuasiQuotes
     ghc-options: -Wall
 
-library lexer
+library
     import: shared
-    exposed-modules: Lexer
+    exposed-modules: Lexer, Parser
 
 executable monkey-hs
     import: shared
     main-is: Main.hs
 
-test-suite spec
+test-suite lexer
     import: shared
     type: exitcode-stdio-1.0
-    main-is: Spec.hs
+    main-is: LexerSpec.hs
+    build-depends: hspec >= 2.7, hspec-discover >= 2.7
+
+test-suite parser
+    import: shared
+    type: exitcode-stdio-1.0
+    main-is: ParserSpec.hs
     build-depends: hspec >= 2.7, hspec-discover >= 2.7

@@ -1,12 +1,22 @@
 import Lexer
 import Test.Hspec
-import Text.RawString.QQ
+import Text.RawString.QQ (r)
+import Prelude hiding (lex)
 
 main :: IO ()
 main = hspec $ do
   describe "lexer" $ do
     it "lexes symbols" $ do
-      Lexer.lex "=+(){},;" `shouldBe` [Assign, Plus, Lparen, Rparen, Lbrace, Rbrace, Comma, Semicolon]
+      lex "=+(){},;"
+        `shouldBe` [ Assign,
+                     Plus,
+                     Lparen,
+                     Rparen,
+                     Lbrace,
+                     Rbrace,
+                     Comma,
+                     Semicolon
+                   ]
 
     it "lexes a full code block" $ do
       let input =
@@ -18,7 +28,7 @@ main = hspec $ do
             };
             let result = add(five, ten);
             |]
-       in Lexer.lex input
+       in lex input
             `shouldBe` [ Let,
                          Ident "five",
                          Assign,
@@ -64,7 +74,7 @@ main = hspec $ do
             !-/*5;
             5 < 10 > 5;
             |]
-       in Lexer.lex input
+       in lex input
             `shouldBe` [ Not,
                          Minus,
                          Divide,
