@@ -11,6 +11,14 @@ data Token
   | Int String
   | Assign
   | Plus
+  | Minus
+  | Divide
+  | Times
+  | Lessthan
+  | Greaterthan
+  | Equal
+  | Notequal
+  | Not
   | Comma
   | Semicolon
   | Lparen
@@ -19,6 +27,11 @@ data Token
   | Rbrace
   | Function
   | Let
+  | True_
+  | False_
+  | If
+  | Else
+  | Return
   | Eof
   deriving (Eq)
 
@@ -29,6 +42,14 @@ instance Show Token where
     Int i -> "INT(" ++ i ++ ")"
     Assign -> "="
     Plus -> "+"
+    Minus -> "-"
+    Divide -> "/"
+    Times -> "*"
+    Lessthan -> "<"
+    Greaterthan -> ">"
+    Equal -> "=="
+    Notequal -> "!="
+    Not -> "!"
     Comma -> ","
     Semicolon -> ";"
     Lparen -> "("
@@ -38,6 +59,11 @@ instance Show Token where
     Function -> "FUNCTION"
     Let -> "LET"
     Eof -> "EOF"
+    If -> "IF"
+    Else -> "ELSE"
+    True_ -> "TRUE"
+    False_ -> "FALSE"
+    Return -> "RETURN"
 
 lex :: String -> [Token]
 lex input = case nextToken input of
@@ -50,8 +76,16 @@ nextToken input = case input of
   '\t' : xs -> nextToken xs
   '\n' : xs -> nextToken xs
   '\r' : xs -> nextToken xs
+  '!' : '=' : xs -> (Notequal, xs)
+  '!' : xs -> (Not, xs)
+  '=' : '=' : xs -> (Equal, xs)
+  '<' : xs -> (Lessthan, xs)
+  '>' : xs -> (Greaterthan, xs)
   '=' : xs -> (Assign, xs)
   '+' : xs -> (Plus, xs)
+  '-' : xs -> (Minus, xs)
+  '*' : xs -> (Times, xs)
+  '/' : xs -> (Divide, xs)
   '(' : xs -> (Lparen, xs)
   ')' : xs -> (Rparen, xs)
   '{' : xs -> (Lbrace, xs)
@@ -88,4 +122,9 @@ getIdent input =
    in case ident of
         "let" -> (Let, rest)
         "fn" -> (Function, rest)
+        "true" -> (True_, rest)
+        "false" -> (False_, rest)
+        "if" -> (If, rest)
+        "else" -> (Else, rest)
+        "return" -> (Return, rest)
         _ -> (Ident ident, rest)

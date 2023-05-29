@@ -64,4 +64,18 @@ main = hspec $ do
             !-/*5;
             5 < 10 > 5;
             |]
-       in Lexer.lex input `shouldBe` []
+       in Lexer.lex input
+            `shouldBe` [ Not,
+                         Minus,
+                         Divide,
+                         Times,
+                         Int "5",
+                         Semicolon,
+                         Int "5",
+                         Lessthan,
+                         Int "10",
+                         Greaterthan,
+                         Int "5",
+                         Semicolon,
+                         Eof
+                       ]
