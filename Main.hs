@@ -1,4 +1,12 @@
 module Main where
 
+import Lexer
+
 main :: IO ()
-main = putStrLn "Hello, Haskell!"
+main = repl
+
+repl :: IO ()
+repl = do
+  line <- getLine
+  print $ Lexer.lex line
+  repl
